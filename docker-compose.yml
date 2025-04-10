@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    image: tu-granja-image
+    container_name: tu-granja-container
+    volumes:
+      - type: bind
+        source: .
+        target: /code
+    ports:
+      - 5001:5001
+    stdin_open: true
+    tty: true
+    entrypoint: python app.py
