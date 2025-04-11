@@ -6,6 +6,7 @@ from url import add_urls
 
 from sqlalchemy import NullPool
 from models import db
+from schemas import ma
 
 config = Config()
 
@@ -21,6 +22,7 @@ def create_flask_app(use_null_pool=False):
     )
 
     db.init_app(app)
+    ma.init_app(app)
 
     app_context = app.app_context()
     app_context.push()

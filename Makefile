@@ -20,7 +20,7 @@ stop:
 
 clean: stop
 	docker container prune -f
-	docker imagen rm tu-granja-image
+	docker image rm tu-granja-image
 
 clean_all: clean
 	docker system prune -a
