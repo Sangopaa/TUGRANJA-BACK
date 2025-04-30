@@ -32,4 +32,4 @@ class Animal(Base):
 
     created_by_user = relationship("User", foreign_keys=[created_by])
     updated_by_user = relationship("User", foreign_keys=[updated_by])
-    group_id = relationship("Group", foreign_keys=[group_id])
+    group = relationship("Group", foreign_keys=[group_id])
