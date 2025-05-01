@@ -15,5 +15,5 @@ class Config:
     def _init_config(self):
         self.config = dotenv_values(dotenv_path=".env")
 
-    def get(self, key, default=None):
+    def get_env_variable(self, key, default=None):
         return self.config.get(key, default)

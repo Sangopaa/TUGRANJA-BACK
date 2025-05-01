@@ -10,8 +10,12 @@ from schemas import ma
 
 config = Config()
 
-db_name = config.get("MYSQL_DATABASE_DB")
-connection_string = f"mysql+pymysql://{config.get('MYSQL_DATABASE_USER')}:{config.get('MYSQL_DATABASE_PASSWORD')}@{config.get('MYSQL_DATABASE_HOST')}:{config.get('MYSQL_DATABASE_PORT')}/{db_name}"
+db_name = (
+    config.get_env_variable("MYSQL_DATABASE_DB_TEST")
+    if bool(int(config.get_env_variable("TESTING", 0)))
+    else config.get_env_variable("MYSQL_DATABASE_DB")
+)
+connection_string = f"mysql+pymysql://{config.get_env_variable('MYSQL_DATABASE_USER')}:{config.get_env_variable('MYSQL_DATABASE_PASSWORD')}@{config.get_env_variable('MYSQL_DATABASE_HOST')}:{config.get_env_variable('MYSQL_DATABASE_PORT')}/{db_name}"
 
 
 def create_flask_app(use_null_pool=False):
