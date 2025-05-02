@@ -1,5 +1,5 @@
 from shared.responses.dict_response import DictResponse
-from shared.utils.exception_handler import handler_service_exceptions
+from shared.utils.handler_exception import handler_service_exceptions
 
 from schemas.farm import FarmSchema
 

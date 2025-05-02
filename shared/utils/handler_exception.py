@@ -4,6 +4,8 @@ from sqlalchemy.exc import IntegrityError
 
 from shared.responses.dict_response import DictResponse
 
+from models import db
+
 
 def handler_service_exceptions(func):
     @wraps(func)
@@ -15,8 +17,7 @@ def handler_service_exceptions(func):
             return DictResponse(status_code=400, response={"error": err.messages})
 
         except IntegrityError as err:
-            if "db" in kwargs:
-                kwargs["db"].session.rollback()
+            db.session.rollback()
             return DictResponse(status_code=400, response={"error": str(err.orig)})
 
         except Exception as e:
