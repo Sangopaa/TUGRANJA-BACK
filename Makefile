@@ -37,10 +37,6 @@ test:
 	docker compose run --entrypoint="" -e TEST=1 app alembic upgrade head
 	docker compose run --entrypoint="" -e TEST=1 -e DEBUG=true --rm app python -m pytest -v tests
 
-test: 
-	docker compose run --entrypoint="" -e TEST=1 app alembic upgrade head
-	docker compose run --entrypoint="" -e TEST=1 -e DEBUG=true --rm app python -m pytest -v tests
-
 file_test:
 	docker compose run --entrypoint="" -e TEST=1 app alembic upgrade head
 	docker compose run --entrypoint="" -e TEST=1 -e DEBUG=true --rm app python -m pytest -v tests/${path_test}
