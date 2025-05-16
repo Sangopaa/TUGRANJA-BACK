@@ -34,9 +34,9 @@ clean_all: clean
 	docker volume rm tu-granja-volume
 
 test: 
-	docker compose run --entrypoint="" -e TEST=1 app alembic upgrade head
-	docker compose run --entrypoint="" -e TEST=1 -e DEBUG=true --rm app python -m pytest -v tests
+	docker compose run --entrypoint="" -e TESTING=1 app alembic upgrade head
+	docker compose run --entrypoint="" -e TESTING=1 -e DEBUG=true --rm app python -m pytest -v tests
 
 file_test:
-	docker compose run --entrypoint="" -e TEST=1 app alembic upgrade head
-	docker compose run --entrypoint="" -e TEST=1 -e DEBUG=true --rm app python -m pytest -v tests/${path_test}
+	docker compose run --entrypoint="" -e TESTING=1 app alembic upgrade head
+	docker compose run --entrypoint="" -e TESTING=1 -e DEBUG=true --rm app python -m pytest -v tests/${path_test}

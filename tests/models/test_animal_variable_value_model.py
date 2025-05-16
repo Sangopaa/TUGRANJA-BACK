@@ -1,9 +1,9 @@
 from tests.factories import AnimalVariableValueFactory
 
 
-class TestsAnimalModel:
+class TestsAnimalVariableValueModel:
 
-    def test_animal_model_fields(self):
+    def test_animal_varialbe_value_model_fields(self):
         animal = AnimalVariableValueFactory()
 
         assert animal.identifier
