@@ -4,7 +4,7 @@ from shared.utils.handler_exception import handler_service_exceptions
 from schemas.farm import FarmSchema
 
 from models import db
-from model_queries.farm import get_farm_by_id
+from model_queries.farm import get_farm_by_id, get_paginated_farms
 
 
 class FarmService:
@@ -36,6 +36,34 @@ class FarmService:
             return self.response
 
         self.response.response = self.farm_schema.dump(farm)
+        self.response.status_code = 200
+
+        return self.response
+
+    @handler_service_exceptions
+    def get_farms(self, size: int, page: int) -> DictResponse:
+        """Obtain all farms.
+
+        Return:
+            Response object with the list of farms or error message.
+        """
+
+        if size is None or page is None:
+            self.response.status_code = 400
+            self.response.response = {"error": "Size and page are required."}
+            return self.response
+
+        farms, total = get_paginated_farms(page=page, size=size)
+
+        if not farms:
+            self.response.status_code = 404
+            self.response.response = {"error": "No farms found."}
+            return self.response
+
+        self.response.response = {
+            "results": self.farm_schema.dump(farms, many=True),
+            "total": total,
+        }
         self.response.status_code = 200
 
         return self.response
