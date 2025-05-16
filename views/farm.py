@@ -17,13 +17,9 @@ class FarmView(Resource):
             page = get_int_request_arg(args=request.args, arg_name="page", default=1)
 
         except Exception as e:
-            return {"message": str(e)}, 400
+            return {"error": str(e)}, 400
 
         response = self.farm_service.get_farms(size=size, page=page)
-        return response.response, response.status_code
-
-    def post(self):
-        response = self.farm_service.create_farm(farm_data=request.json)
         return response.response, response.status_code
 
 
@@ -34,4 +30,8 @@ class FarmDetailView(Resource):
 
     def get(self, farm_id: int):
         response = self.farm_service.get_farm(farm_id=farm_id)
+        return response.response, response.status_code
+
+    def post(self):
+        response = self.farm_service.create_farm(farm_data=request.json)
         return response.response, response.status_code

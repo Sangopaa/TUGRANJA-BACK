@@ -53,14 +53,17 @@ class FarmService:
             self.response.response = {"error": "Size and page are required."}
             return self.response
 
-        farms = get_paginated_farms(page=page, size=size)
+        farms, total = get_paginated_farms(page=page, size=size)
 
         if not farms:
             self.response.status_code = 404
             self.response.response = {"error": "No farms found."}
             return self.response
 
-        self.response.response = self.farm_schema.dump(farms, many=True)
+        self.response.response = {
+            "results": self.farm_schema.dump(farms, many=True),
+            "total": total,
+        }
         self.response.status_code = 200
 
         return self.response

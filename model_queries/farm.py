@@ -2,6 +2,8 @@ from models import db
 
 from models.farm import Farm
 
+from typing import Tuple, List
+
 
 def get_farm_by_id(farm_id: int) -> Farm:
     """Obtain a farm by its ID.
@@ -15,7 +17,7 @@ def get_farm_by_id(farm_id: int) -> Farm:
     return db.session.query(Farm).filter(Farm.identifier == farm_id).one_or_none()
 
 
-def get_paginated_farms(page: int, size: int) -> list[Farm]:
+def get_paginated_farms(page: int, size: int) -> Tuple[List[Farm], int]:
     """Obtain a paginated list of farms.
 
     Keyword arguments:
@@ -25,4 +27,6 @@ def get_paginated_farms(page: int, size: int) -> list[Farm]:
         List of Farm objects for the given page.
     """
 
-    return db.session.query(Farm).paginate(page=page, per_page=size).items
+    farms = db.session.query(Farm).paginate(page=page, per_page=size)
+
+    return farms.items, farms.total

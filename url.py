@@ -8,5 +8,7 @@ def add_urls(app):
     api = Api(app)
 
     api.add_resource(PingView, "/ping", endpoint="ping")
-    api.add_resource(FarmView, "/farm", "/farm", endpoint="farm")
-    api.add_resource(FarmDetailView, "/farm/<int:farm_id>", endpoint="farm_detail")
+    api.add_resource(FarmView, "/farms", endpoint="farm")
+    api.add_resource(
+        FarmDetailView, "/farm", "/farm/<int:farm_id>", endpoint="farm_detail"
+    )

@@ -22,6 +22,57 @@ class TestFarmService:
         assert isinstance(self.farm_service.response, DictResponse)
 
 
+class TestFarmServiceGetFarms:
+    def setup_method(self):
+        self.farms = FarmFactory.create_batch(25)
+        self.farm_service = FarmService()
+
+    def test_get_farms_returns_dict_response_for_existing_farm(self):
+        response = self.farm_service.get_farms()
+
+        assert isinstance(response, DictResponse)
+
+    def test_get_farms_returns_right_data_on_success(self):
+        response = self.farm_service.get_farms(size=10, page=1)
+
+        assert response.status_code == 200
+        assert response.response["total"] == 25
+
+        for index, farm in enumerate(response.response["results"]):
+            assert farm["identifier"] == self.farms[index].identifier
+            assert farm["name"] == self.farms[index].name
+            assert farm["created_at"] == self.farms[index].created_at.strftime(
+                "%Y-%m-%dT%H:%M:%S"
+            )
+            assert farm["updated_at"] == self.farms[index].updated_at.strftime(
+                "%Y-%m-%dT%H:%M:%S"
+            )
+
+    @pytest.mark.parametrize("size, page", [(None, 1), (10, None), (None, None)])
+    def test_get_farm_returns_error_for_missing_page(self, size, page):
+        response = self.farm_service.get_farms(size=size, page=page)
+
+        assert response.status_code == 400
+        assert response.response == {"error": "Size and page are required."}
+
+    @patch("core.farm.farm_service.get_paginated_farms")
+    def test_called_get_farms_with_correct_size_and_page(
+        self, mock_get_paginated_farms
+    ):
+        self.farm_service.get_farms(size=10, page=1)
+
+        mock_get_paginated_farms.assert_called_once_with(size=10, page=1)
+
+    def test_not_found_error_for_nonexistent_farm_id(self):
+        for farm in self.farms:
+            db.session.delete(farm)
+        db.session.commit()
+        response = self.farm_service.get_farms(size=10, page=1)
+
+        assert response.status_code == 404
+        assert response.response == {"error": "No farms found."}
+
+
 class TestFarmServiceGetFarm:
 
     def setup_method(self):
